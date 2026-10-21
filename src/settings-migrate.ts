@@ -88,12 +88,6 @@ export function migrateLoadedSettings(data: RawSettingsData | null): {
     author: { ...DEFAULT_SETTINGS.author, ...rest.author },
   });
 
-  // v4: decoration toggles are Studio session-only — clear persisted checked state.
-  if (fromVersion < 4) {
-    settings.watermark.enable = false;
-    settings.author.show = false;
-    shouldSave = true;
-  }
 
   // v5: fill platform default only when the key was missing (do not clobber user choice).
   if (fromVersion < 5 && typeof rest.autoRerenderPreview !== 'boolean') {

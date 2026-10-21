@@ -43,20 +43,18 @@ import {
 
 function createStudioDraft(plugin: ExportImgPlugin): ExportImgSettings {
   const draft = cloneSettings(plugin.settings);
-  // Studio toggles are session-only — never open with watermark/author pre-checked.
-  draft.watermark.enable = false;
-  draft.author.show = false;
+  // Default watermark & author to true if undefined or respect plugin.settings (always on by default)
+  if (draft.watermark.enable === undefined) draft.watermark.enable = true;
+  if (draft.author.show === undefined) draft.author.show = true;
   if (draft.split.height <= 0) {
     draft.split.height = defaultSplitHeight(draft.width);
   }
   return draft;
 }
 
-/** Persist preconfig from Studio without carrying session decoration toggles. */
+/** Persist preconfig and decoration state from Studio. */
 function settingsToPersist(draft: ExportImgSettings): ExportImgSettings {
   const next = cloneSettings(draft);
-  next.watermark.enable = false;
-  next.author.show = false;
   return next;
 }
 

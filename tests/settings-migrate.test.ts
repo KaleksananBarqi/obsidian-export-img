@@ -82,8 +82,8 @@ describe('migrateLoadedSettings', () => {
     } as Parameters<typeof migrateLoadedSettings>[0]);
     // Desktop mock → on; mobile installs get off via Platform.isMobile.
     expect(settings.autoRerenderPreview).toBe(true);
-    expect(settings.watermark.enable).toBe(false);
-    expect(settings.author.show).toBe(false);
+    expect(settings.watermark.enable).toBe(true);
+    expect(settings.author.show).toBe(true);
     expect(settings.settingsVersion).toBe(SETTINGS_VERSION);
     expect(shouldSave).toBe(true);
   });
@@ -108,14 +108,14 @@ describe('migrateLoadedSettings', () => {
     expect(shouldSave).toBe(true);
   });
 
-  it('clears persisted watermark/author toggles when upgrading to v4', () => {
+  it('preserves watermark/author toggles when upgrading from legacy versions', () => {
     const { settings, shouldSave } = migrateLoadedSettings({
       settingsVersion: 3,
       watermark: { enable: true, text: 'WM' },
       author: { show: true, name: 'Ada' },
     } as Parameters<typeof migrateLoadedSettings>[0]);
-    expect(settings.watermark.enable).toBe(false);
-    expect(settings.author.show).toBe(false);
+    expect(settings.watermark.enable).toBe(true);
+    expect(settings.author.show).toBe(true);
     expect(settings.watermark.text).toBe('WM');
     expect(settings.author.name).toBe('Ada');
     expect(settings.settingsVersion).toBe(SETTINGS_VERSION);
